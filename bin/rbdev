@@ -44,6 +44,13 @@ rbdev() {
     _exp=$(cd "$_dir" && pwd)
     _mods=false
 
+    # put script at head of PATH
+    test -d "$_exp"/script && {
+        PATH="$_exp/script:$PATH"
+        printf 1>&2 "%10s %s\n" "PATH+" "$_dir/script"
+        _mods=true
+    }
+
     # put bin at head of PATH
     test -d "$_exp"/bin && {
         PATH="$_exp/bin:$PATH"
