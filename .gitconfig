@@ -33,7 +33,7 @@
 	whitespace = space-before-tab, trailing-space
 
 [help]
-	browser = open
+	browser = gitscm
 
 [branch]
 	autosetupmerge = true
@@ -75,6 +75,6 @@
 	http-clone = true
 
 [browser "gitscm"]
-	cmd = sh -c 'open http://git-scm.com/docs/$(basename $1 .html)' --
+	cmd = /bin/sh -c 'open http://git-scm.com/docs/$(basename $1 .html)' --
 
 # vim: noexpandtab ts=4 sw=4 sts=0
