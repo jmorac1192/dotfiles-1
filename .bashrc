@@ -26,12 +26,12 @@ test -r /etc/bashrc &&
 set -o notify
 
 # shell opts. see bash(1) for details
-shopt -s cdspell >/dev/null 2>&1
-shopt -s extglob >/dev/null 2>&1
-shopt -s histappend >/dev/null 2>&1
-shopt -s hostcomplete >/dev/null 2>&1
-shopt -s interactive_comments >/dev/null 2>&1
-shopt -u mailwarn >/dev/null 2>&1
+shopt -s cdspell                 >/dev/null 2>&1
+shopt -s extglob                 >/dev/null 2>&1
+shopt -s histappend              >/dev/null 2>&1
+shopt -s hostcomplete            >/dev/null 2>&1
+shopt -s interactive_comments    >/dev/null 2>&1
+shopt -u mailwarn                >/dev/null 2>&1
 shopt -s no_empty_cmd_completion >/dev/null 2>&1
 
 # fuck that you have new mail shit
@@ -158,7 +158,7 @@ prompt_compact() {
 
 prompt_color() {
     PS1="${GREY}[${COLOR1}\u${GREY}@${COLOR2}\h${GREY}:${COLOR1}\W${GREY}]${COLOR2}$P${PS_CLEAR} "
-    PS2="\[[33;1m\]continue \[[0m[1m\]> "
+    PS2="\[[33;1m\] \[[0m[1m\]> "
 }
 
 # ----------------------------------------------------------------------
@@ -166,32 +166,12 @@ prompt_color() {
 # ----------------------------------------------------------------------
 
 if [ "$UNAME" = Darwin ]; then
-    # put ports on the paths if /opt/local exists
-    test -x /opt/local -a ! -L /opt/local && {
-        PORTS=/opt/local
-
-        # setup the PATH and MANPATH
-        PATH="$PORTS/bin:$PORTS/sbin:$PATH"
-        MANPATH="$PORTS/share/man:$MANPATH"
-
-        # nice little port alias
-        alias port="sudo nice -n +18 $PORTS/bin/port"
-    }
-
-    test -x /usr/pkg -a ! -L /usr/pkg && {
-        PATH="/usr/pkg/sbin:/usr/pkg/bin:$PATH"
-        MANPATH="/usr/pkg/share/man:$MANPATH"
-    }
-
     # setup java environment. puke.
-    JAVA_HOME="/System/Library/Frameworks/JavaVM.framework/Home"
-    ANT_HOME="/Developer/Java/Ant"
-    export ANT_HOME JAVA_HOME
+    export JAVA_HOME="/System/Library/Frameworks/JavaVM.framework/Home"
 
     # hold jruby's hand
     test -d /opt/jruby &&
-    JRUBY_HOME="/opt/jruby"
-    export JRUBY_HOME
+    export JRUBY_HOME="/opt/jruby"
 fi
 
 # ----------------------------------------------------------------------
@@ -212,14 +192,12 @@ test -z "$BASH_COMPLETION" && {
     test -n "$PS1" && test $bmajor -gt 1 && {
         # search for a bash_completion file to source
         for f in /usr/local/etc/bash_completion \
-                 /usr/pkg/etc/bash_completion \
-                 /opt/local/etc/bash_completion \
                  /etc/bash_completion
         do
-            test -f $f && {
+            if [ -f $f ]; then
                 . $f
                 break
-            }
+            fi
         done
     }
     unset bash bmajor bminor
@@ -255,21 +233,6 @@ alias ls="command ls $LS_COMMON"
 # these use the ls aliases above
 alias ll="ls -l"
 alias l.="ls -d .*"
-
-# --------------------------------------------------------------------
-# MISC COMMANDS
-# --------------------------------------------------------------------
-
-# push SSH public key to another box
-push_ssh_cert() {
-    local _host
-    test -f ~/.ssh/id_dsa.pub || ssh-keygen -t dsa
-    for _host in "$@";
-    do
-        echo $_host
-        ssh $_host 'cat >> ~/.ssh/authorized_keys' < ~/.ssh/id_dsa.pub
-    done
-}
 
 # --------------------------------------------------------------------
 # PATH MANIPULATION FUNCTIONS
@@ -322,18 +285,15 @@ puniq () {
     cut -f 2- |tr '\n' : |sed -e 's/:$//' -e 's/^://'
 }
 
-# use gem-man(1) if available:
-man () {
-    gem man -s "$@" 2>/dev/null ||
-    command man "$@"
-}
-
 # -------------------------------------------------------------------
 # USER SHELL ENVIRONMENT
 # -------------------------------------------------------------------
 
 # bring in rbdev functions
 . rbdev 2>/dev/null || true
+
+# bundle exec
+alias be='bundle exec'
 
 # source ~/.shenv now if it exists
 test -r ~/.shenv &&
@@ -355,5 +315,8 @@ test -n "$INTERACTIVE" -a -n "$LOGIN" && {
     uname -npsr
     uptime
 }
+
+# beep
+alias beep='tput bel'
 
 # vim: ts=4 sts=4 shiftwidth=4 expandtab
