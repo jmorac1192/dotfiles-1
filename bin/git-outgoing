@@ -1,6 +1,7 @@
 #!/bin/sh
 # Usage: git-outgoing [-d] [<upstream>] [<head> [<limit>]]
 # Show commits on current branch that do not exist on branch <upstream>.
+set -e
 
 # bail out with message to stderr and exit status 1
 die() {
@@ -64,7 +65,7 @@ then
      rev="$1"; shift
      git format-patch --stdout "$@" "$rev"..HEAD
 else git cherry -v "$@"                                |
-     cut -c1-9 -c43-                                   |
+     cut -c1-9,43-                                     |
      sed -e "s/^\(.\) \(.......\)/\1 $SHA\2$RESET/"    |
      sed -e "s/^-/$REM-$RESET/" -e "s/^+/$ADD+$RESET/"
 fi
