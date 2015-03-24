@@ -52,6 +52,7 @@ for host in "$@"; do
 + /bin/git-object-deflate
 + /bin/git-push-log
 + /bin/git-sh
++ /bin/git-track
 + /bin/git-incoming
 + /bin/git-outgoing
 + /bin/gzball
