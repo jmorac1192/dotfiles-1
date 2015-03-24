@@ -1,14 +1,21 @@
 #!/bin/sh
-#/ Usage: github-url [<path>]
+#/ Usage: github-url [-r <remote>] [<path>]
 #/ Make a github.com URL using the current repository's remote URLs to
 #/ determine location. When <path> is given, append it to the generated URL.
 set -e
 
 # The http URL to the git repository on github.com.
 url=
+remote=origin
+
+# handle different default remote
+if [ "$1" = "-r" ]; then
+    remote="$2"
+    shift 2
+fi
 
 # Run through all remotes looking for a github repository. Bail when found.
-remotes="origin $(git remote)"
+remotes="$remote $(git remote)"
 for remote in $remotes;
 do
     git_url=$(git config remote.$remote.url || true)
