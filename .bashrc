@@ -19,8 +19,9 @@
 # ----------------------------------------------------------------------
 
 # bring in system bashrc
-test -r /etc/bashrc &&
-      . /etc/bashrc
+if [ -r /etc/bashrc ]; then
+    . /etc/bashrc
+fi
 
 # notify of bg job completion immediately
 set -o notify
@@ -51,9 +52,10 @@ umask 0022
 PATH="$PATH:/usr/local/sbin:/usr/sbin:/sbin"
 PATH="/usr/local/bin:$PATH"
 
-# put ~/bin on PATH if you have it
-test -d "$HOME/bin" &&
-PATH="$HOME/bin:$PATH"
+# put ~/bin first on PATH
+if [ -d "$HOME/bin" ]; then
+    PATH="$HOME/bin:$PATH"
+fi
 
 # ----------------------------------------------------------------------
 # ENVIRONMENT CONFIGURATION
@@ -99,13 +101,15 @@ HAVE_VIM=$(command -v vim)
 HAVE_GVIM=$(command -v gvim)
 
 # EDITOR
-test -n "$HAVE_VIM" &&
-EDITOR=vim ||
-EDITOR=vi
+if [ -n "$HAVE_VIM" ]; then
+    EDITOR=vim
+else
+    EDITOR=vi
+fi
 export EDITOR
 
 # PAGER
-if test -n "$(command -v less)" ; then
+if [ -n "$(command -v less)" ]; then
     PAGER="less -FirSwX"
     MANPAGER="less -FiRswX"
 else
@@ -114,7 +118,7 @@ else
 fi
 export PAGER MANPAGER
 
-# Ack
+# ACK
 ACK_PAGER="$PAGER"
 ACK_PAGER_COLOR="$PAGER"
 
@@ -133,8 +137,8 @@ if [ "$LOGNAME" = "root" ]; then
     COLOR1="${RED}"
     COLOR2="${BROWN}"
     P="#"
-elif hostname | grep -q 'github\.com'; then
-    GITHUB=yep
+elif hostname | grep -q '\.github\.'; then
+    GITHUB=true
     COLOR1="\[\e[0;94m\]"
     COLOR2="\[\e[0;92m\]"
     P="\$"
@@ -168,40 +172,25 @@ prompt_color() {
 if [ "$UNAME" = Darwin ]; then
     # setup java environment. puke.
     export JAVA_HOME="/System/Library/Frameworks/JavaVM.framework/Home"
-
-    # hold jruby's hand
-    test -d /opt/jruby &&
-    export JRUBY_HOME="/opt/jruby"
 fi
-
-# ----------------------------------------------------------------------
-# ALIASES / FUNCTIONS
-# ----------------------------------------------------------------------
-
-# disk usage with human sizes and minimal depth
-alias du1='du -h --max-depth=1'
-alias fn='find . -name'
-alias hi='history | tail -20'
 
 # ----------------------------------------------------------------------
 # BASH COMPLETION
 # ----------------------------------------------------------------------
 
-test -z "$BASH_COMPLETION" && {
+if [ -z "$BASH_COMPLETION" ]; then
     bash=${BASH_VERSION%.*}; bmajor=${bash%.*}; bminor=${bash#*.}
-    test -n "$PS1" && test $bmajor -gt 1 && {
+    if [ -n "$PS1" -a "$bmajor" -gt 1 ]; then
         # search for a bash_completion file to source
-        for f in /usr/local/etc/bash_completion \
-                 /etc/bash_completion
-        do
+        for f in /usr/local/etc/bash_completion /etc/bash_completion; do
             if [ -f $f ]; then
                 . $f
                 break
             fi
         done
-    }
+    fi
     unset bash bmajor bminor
-}
+fi
 
 # override and disable tilde expansion
 _expand() {
@@ -217,104 +206,48 @@ LS_COMMON="-hBG"
 
 # if the dircolors utility is available, set that up to
 dircolors="$(type -P gdircolors dircolors | head -1)"
-test -n "$dircolors" && {
+if [ -n "$dircolors" ]; then
     COLORS=/etc/DIR_COLORS
     test -e "/etc/DIR_COLORS.$TERM"   && COLORS="/etc/DIR_COLORS.$TERM"
     test -e "$HOME/.dircolors"        && COLORS="$HOME/.dircolors"
     test ! -e "$COLORS"               && COLORS=
     eval `$dircolors --sh $COLORS`
-}
+fi
 unset dircolors
 
 # setup the main ls alias if we've established common args
-test -n "$LS_COMMON" &&
-alias ls="command ls $LS_COMMON"
+if [ -n "$LS_COMMON" ]; then
+    alias ls="command ls $LS_COMMON"
+fi
 
 # these use the ls aliases above
 alias ll="ls -l"
-alias l.="ls -d .*"
-
-# --------------------------------------------------------------------
-# PATH MANIPULATION FUNCTIONS
-# --------------------------------------------------------------------
-
-# Usage: pls [<var>]
-# List path entries of PATH or environment variable <var>.
-pls () { eval echo \$${1:-PATH} |tr : '\n'; }
-
-# Usage: pshift [-n <num>] [<var>]
-# Shift <num> entries off the front of PATH or environment var <var>.
-# with the <var> option. Useful: pshift $(pwd)
-pshift () {
-    local n=1
-    [ "$1" = "-n" ] && { n=$(( $2 + 1 )); shift 2; }
-    eval "${1:-PATH}='$(pls |tail -n +$n |tr '\n' :)'"
-}
-
-# Usage: ppop [-n <num>] [<var>]
-# Pop <num> entries off the end of PATH or environment variable <var>.
-ppop () {
-    local n=1 i=0
-    [ "$1" = "-n" ] && { n=$2; shift 2; }
-    while [ $i -lt $n ]
-    do eval "${1:-PATH}='\${${1:-PATH}%:*}'"
-       i=$(( i + 1 ))
-    done
-}
-
-# Usage: prm <path> [<var>]
-# Remove <path> from PATH or environment variable <var>.
-prm () { eval "${2:-PATH}='$(pls $2 |grep -v "^$1\$" |tr '\n' :)'"; }
-
-# Usage: punshift <path> [<var>]
-# Shift <path> onto the beginning of PATH or environment variable <var>.
-punshift () { eval "${2:-PATH}='$1:$(eval echo \$${2:-PATH})'"; }
-
-# Usage: ppush <path> [<var>]
-ppush () { eval "${2:-PATH}='$(eval echo \$${2:-PATH})':$1"; }
-
-# Usage: puniq [<path>]
-# Remove duplicate entries from a PATH style value while retaining
-# the original order. Use PATH if no <path> is given.
-#
-# Example:
-#   $ puniq /usr/bin:/usr/local/bin:/usr/bin
-#   /usr/bin:/usr/local/bin
-puniq () {
-    echo "$1" |tr : '\n' |nl |sort -u -k 2,2 |sort -n |
-    cut -f 2- |tr '\n' : |sed -e 's/:$//' -e 's/^://'
-}
 
 # -------------------------------------------------------------------
 # USER SHELL ENVIRONMENT
 # -------------------------------------------------------------------
 
-# bring in rbdev functions
+# bring in rbdev functions from ~/bin
 . rbdev 2>/dev/null || true
 
-# bundle exec
-alias be='bundle exec'
-
-# source ~/.shenv now if it exists
-test -r ~/.shenv &&
-. ~/.shenv
-
-# condense PATH entries
-PATH=$(puniq $PATH)
-MANPATH=$(puniq $MANPATH)
+# ~/.shenv is used as a machine specific ~/.bashrc
+if [ -r ~/.shenv ]; then
+    . ~/.shenv
+fi
 
 # Use the color prompt by default when interactive
-test -n "$PS1" &&
-prompt_color
+if [ -n "$PS1" ]; then
+    prompt_color
+fi
 
 # -------------------------------------------------------------------
 # MOTD / FORTUNE
 # -------------------------------------------------------------------
 
-test -n "$INTERACTIVE" -a -n "$LOGIN" && {
+if [ -n "$INTERACTIVE" -a -n "$LOGIN" ]; then
     uname -npsr
     uptime
-}
+fi
 
 # beep
 alias beep='tput bel'
