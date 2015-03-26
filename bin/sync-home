@@ -42,6 +42,7 @@ for host in "$@"; do
 
 + /bin
 + /bin/ack
++ /bin/autoscreen
 + /bin/lgrep
 + /bin/git-big-object-report
 + /bin/git-cut-branch
