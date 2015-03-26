@@ -187,7 +187,6 @@ imap <unique> <silent> <D-f> <C-O><Plug>LookupFile
 if system('uname') =~ 'Darwin'
   let $PATH = $HOME .
     \ '/usr/local/bin:/usr/local/sbin:' .
-    \ '/usr/pkg/bin:' .
     \ '/opt/local/bin:/opt/local/sbin:' .
     \ $PATH
 endif
@@ -197,7 +196,7 @@ endif
 " ---------------------------------------------------------------------------
 
 au Filetype sh,bash set ts=4 sts=4 sw=4 expandtab
-let g:is_bash = 1
+let g:is_posix = 1
 
 " ---------------------------------------------------------------------------
 "  Misc mappings
@@ -257,12 +256,14 @@ au BufRead,BufNewFile *.sql        set ft=pgsql
 au BufRead,BufNewFile *.rl         set ft=ragel
 au BufRead,BufNewFile *.svg        set ft=svg
 au BufRead,BufNewFile *.haml       set ft=haml
-au BufRead,BufNewFile *.md         set ft=mkd tw=80 ts=2 sw=2 expandtab
-au BufRead,BufNewFile *.markdown   set ft=mkd tw=80 ts=2 sw=2 expandtab
-au BufRead,BufNewFile *.ronn       set ft=mkd tw=80 ts=2 sw=2 expandtab
+au BufRead,BufNewFile *.md         set ft=markdown tw=80 ts=2 sw=2 expandtab
+au BufRead,BufNewFile *.markdown   set ft=markdown tw=80 ts=2 sw=2 expandtab
+au BufRead,BufNewFile *.ronn       set ft=markdown tw=80 ts=2 sw=2 expandtab
+au BufRead,BufNewFile *.go         set ts=4 sw=4 sts=0 noexpandtab
 
 au Filetype gitcommit set tw=68  spell
-au Filetype ruby      set tw=80  ts=2
+au Filetype ruby      set tw=80  ts=2 sw=2 sts=0
+
 au Filetype html,xml,xsl,rhtml source $HOME/.vim/scripts/closetag.vim
 
 au BufNewFile,BufRead *.mustache        setf mustache
@@ -280,7 +281,3 @@ let $MANPAGER = '/usr/bin/less -is'
 
 let g:rails_subversion=1
 let g:rails_menu=2
-
-" make file executable
-command -nargs=* Xe !chmod +x <args>
-command! -nargs=0 Xe !chmod +x %
