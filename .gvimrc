@@ -8,7 +8,7 @@ colorscheme vividchalk
 set gfn=Menlo:h14
 set anti               " antialiasing
 set guioptions=gemc
-set columns=100
+set columns=104
 set lines=61
 set ch=4
 

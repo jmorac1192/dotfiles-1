@@ -1,7 +1,7 @@
 " Ignore files listed in .gitignore
 "
 " http://stackoverflow.com/questions/579871/can-i-make-vim-respect-my-gitignore-files
-let filename = '.gitignore'
+let filename = '.gitignore-blahhh'
 if filereadable(filename)
     let igstring = ''
     for oline in readfile(filename)
