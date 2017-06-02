@@ -1,6 +1,6 @@
 [user]
 	name = Ryan Tomayko
-	email = rtomayko@gmail.com
+	email = r@tomayko.com
 
 
 [alias]
@@ -71,10 +71,8 @@
 	changed = green bold
 	untracked = blue bold
 
-[hub]
-	http-clone = true
-
 [browser "gitscm"]
 	cmd = /bin/sh -c 'open http://git-scm.com/docs/$(basename $1 .html)' --
+	protocol = https
 
 # vim: noexpandtab ts=4 sw=4 sts=0
