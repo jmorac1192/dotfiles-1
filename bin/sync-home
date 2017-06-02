@@ -26,6 +26,7 @@ for host in "$@"; do
 + /.gitconfig
 + /.tigrc
 + /.irbrc
++ /.tmux.conf
 
 + /.vimrc
 + /.gvimrc
