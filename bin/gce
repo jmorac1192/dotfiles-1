@@ -1,0 +1,4 @@
+#!/bin/sh
+# Usage: gce <command> [<opts>]
+# Alias for 'gcloud compute instances' command.
+exec gcloud compute instances "$@"
