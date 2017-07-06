@@ -268,6 +268,7 @@ au BufRead,BufNewFile *.md         set ft=markdown tw=80 ts=2 sw=2 expandtab
 au BufRead,BufNewFile *.markdown   set ft=markdown tw=80 ts=2 sw=2 expandtab
 au BufRead,BufNewFile *.ronn       set ft=markdown tw=80 ts=2 sw=2 expandtab
 au BufRead,BufNewFile *.go         set ts=4 sw=4 sts=0 noexpandtab
+au BufRead,BufNewFile *.plt        set ft=gnuplot
 
 au Filetype gitcommit set tw=68  spell
 au Filetype ruby      set tw=80  ts=2 sw=2 sts=0
