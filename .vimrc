@@ -199,6 +199,14 @@ au Filetype sh,bash set ts=4 sts=4 sw=4 expandtab
 let g:is_posix = 1
 
 " ---------------------------------------------------------------------------
+" html config
+" ---------------------------------------------------------------------------
+
+let g:html_indent_script1 = "inc"
+let g:html_indent_style1 = "inc"
+let g:html_indent_inctags = "address,article,aside,audio,blockquote,canvas,dd,div,dl,fieldset,figcaption,figure,footer,form,h1,h2,h3,h4,h5,h6,header,hgroup,hr,main,nav,noscript,ol,output,p,pre,section,table,tfoot,ul,video"
+
+" ---------------------------------------------------------------------------
 "  Misc mappings
 " ---------------------------------------------------------------------------
 
