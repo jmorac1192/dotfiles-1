@@ -68,10 +68,11 @@ case "$-" in
 esac
 
 # detect login shell
-case "$0" in
-    -*) LOGIN=yes ;;
-    *)  unset LOGIN ;;
-esac
+if shopt -q login_shell; then
+    LOGIN=yes
+else
+    unset LOGIN
+fi
 
 # enable en_US locale w/ utf-8 encodings if not already configured
 : ${LANG:="en_US.UTF-8"}
