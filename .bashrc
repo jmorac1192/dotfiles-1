@@ -1,7 +1,4 @@
 #!/bin/bash
-# A basically sane bash environment.
-#
-# Ryan Tomayko <http://tomayko.com/about> (with help from the internets).
 
 # the basics
 : ${HOME=~}
@@ -35,7 +32,7 @@ shopt -s interactive_comments    >/dev/null 2>&1
 shopt -u mailwarn                >/dev/null 2>&1
 shopt -s no_empty_cmd_completion >/dev/null 2>&1
 
-# fuck that you have new mail shit
+# disable new mail check
 unset MAILCHECK
 
 # disable core dumps
@@ -80,12 +77,8 @@ esac
 : ${LC_ALL:="en_US.UTF-8"}
 export LANG LANGUAGE LC_CTYPE LC_ALL
 
-# always use PASSIVE mode ftp
-: ${FTP_PASSIVE:=1}
-export FTP_PASSIVE
-
-# ignore backups, CVS directories, python bytecode, vim swap files
-FIGNORE="~:CVS:#:.pyc:.swp:.swa:apache-solr-*"
+# ignore backups, python bytecode, vim swap files
+FIGNORE="~:#:.pyc:.swp:.swa"
 
 # history stuff
 HISTCONTROL=ignoreboth
@@ -96,12 +89,8 @@ HISTSIZE=100000
 # PAGER / EDITOR
 # ----------------------------------------------------------------------
 
-# See what we have to work with ...
-HAVE_VIM=$(command -v vim)
-HAVE_GVIM=$(command -v gvim)
-
 # EDITOR
-if [ -n "$HAVE_VIM" ]; then
+if [ -n "$(command -v vim)" ]; then
     EDITOR=vim
 else
     EDITOR=vi
@@ -167,21 +156,12 @@ prompt_color() {
 }
 
 # ----------------------------------------------------------------------
-# MACOS X / DARWIN SPECIFIC
-# ----------------------------------------------------------------------
-
-if [ "$UNAME" = Darwin ]; then
-    # setup java environment. puke.
-    export JAVA_HOME="/System/Library/Frameworks/JavaVM.framework/Home"
-fi
-
-# ----------------------------------------------------------------------
 # BASH COMPLETION
 # ----------------------------------------------------------------------
 
-if [ -z "$BASH_COMPLETION" ]; then
+if [ -z "$BASH_COMPLETION" -a -n "$PS1" ]; then
     bash=${BASH_VERSION%.*}; bmajor=${bash%.*}; bminor=${bash#*.}
-    if [ -n "$PS1" -a "$bmajor" -gt 1 ]; then
+    if [ "$bmajor" -gt 1 ]; then
         # search for a bash_completion file to source
         for f in /usr/local/etc/bash_completion /etc/bash_completion; do
             if [ -f $f ]; then
@@ -205,7 +185,7 @@ _expand() {
 # we always pass these to ls(1)
 LS_COMMON="-hBG"
 
-# if the dircolors utility is available, set that up to
+# if the dircolors utility is available, set that up too
 dircolors="$(type -P gdircolors dircolors | head -1)"
 if [ -n "$dircolors" ]; then
     COLORS=/etc/DIR_COLORS
@@ -221,15 +201,9 @@ if [ -n "$LS_COMMON" ]; then
     alias ls="command ls $LS_COMMON"
 fi
 
-# these use the ls aliases above
-alias ll="ls -l"
-
 # -------------------------------------------------------------------
 # USER SHELL ENVIRONMENT
 # -------------------------------------------------------------------
-
-# bring in rbdev functions from ~/bin
-. rbdev 2>/dev/null || true
 
 # ~/.shenv is used as a machine specific ~/.bashrc
 if [ -r ~/.shenv ]; then
@@ -249,8 +223,5 @@ if [ -n "$INTERACTIVE" -a -n "$LOGIN" ]; then
     uname -npsr
     uptime
 fi
-
-# beep
-alias beep='tput bel'
 
 # vim: ts=4 sts=4 shiftwidth=4 expandtab
