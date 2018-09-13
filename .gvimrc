@@ -5,7 +5,7 @@
 winpos 0 0
 colorscheme vividchalk
 
-set gfn=Menlo:h14
+set gfn=Noto\ Mono\ 10
 set anti               " antialiasing
 set guioptions=gemc
 set columns=104
