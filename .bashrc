@@ -113,13 +113,28 @@ ACK_PAGER_COLOR="$PAGER"
 # PROMPT
 # ----------------------------------------------------------------------
 
-if [ -n "$PS1" ]; then
-    COLOR_GREY="\[\033[2m\]"
-    COLOR_BOLD="\[\033[1m\]"
-    COLOR_CLEAR="\[\033[0m\]"
+# Generate control sequence string. The \x01 and \x02 mark the text as
+# non-printable so readline and terminals don't assume the chars occupy
+# cells. The "\x1b[" part is the sequence introducer (CSI).
+cseq() {
+    printf "\x01\x1b[$1\x02"
+}
 
-    PS1="${COLOR_BOLD}${COLOR_GREY}\u@\h:\W \$${COLOR_CLEAR} "
-    PS2="> "
+if [ -n "$PS1" ]; then
+    cdefaultfg=$(cseq 39m)
+    cdefaultbg=$(cseq 49m)
+    cthemefg=$(cseq 96m)
+    cthemebg=$(cseq 106m)
+    cblackfg=$(cseq 30m)
+    cinverse=$(cseq 7m)
+    cinverseoff=$(cseq 27m)
+    arr1=$'\xee\x82\xb0'
+    arr2="〉"
+    cbold=$(cseq 1m)
+    creset=$(cseq 0m)
+
+    PS1="${cthemebg}${cblackfg}${cbold}\W${cdefaultbg}${cthemefg}${arr1}${creset} "
+    PS2="$arr2 "
 fi
 
 # ----------------------------------------------------------------------
