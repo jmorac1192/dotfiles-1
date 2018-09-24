@@ -4,9 +4,6 @@
 
 
 [alias]
-	browse       = !hub browse
-	w            = !hub browse
-	compare      = !hub compare
 	cb           = !git-cut-branch
 	sh           = !git-sh
 	grab         = !git-grab
