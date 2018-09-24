@@ -5,6 +5,10 @@
 : ${LOGNAME=$(id -un)}
 : ${UNAME=$(uname)}
 
+# set XDG path vars to defaults
+: ${XDG_CONFIG_HOME:=$HOME/.config}
+: ${XDG_DATA_HOME:=$HOME/.local/share}
+
 # complete hostnames from this file
 : ${HOSTFILE=~/.ssh/known_hosts}
 
