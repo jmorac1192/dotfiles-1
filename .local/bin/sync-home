@@ -18,8 +18,6 @@ for host in "$@"; do
 + /.bashrc
 + /.dircolors
 + /.bash_completion
-+ /.bash_completion.d
-+ /.bash_completion.d/**
 
 + /.screenrc
 + /.gitshrc
@@ -28,6 +26,9 @@ for host in "$@"; do
 + /.irbrc
 + /.tmux.conf
 + /.tmux-osx.conf
++ /.tmux-linux.conf
+
++ /.config/git/config
 
 + /.vimrc
 + /.gvimrc
@@ -42,32 +43,30 @@ for host in "$@"; do
 - /.vim/backup/**
 + /.vim/**
 
-+ /bin
-+ /bin/ack
-+ /bin/autoscreen
-+ /bin/lgrep
-+ /bin/gce
-+ /bin/git-big-object-report
-+ /bin/git-cut-branch
-+ /bin/git-find-object
-+ /bin/git-grab
-+ /bin/git-ls-object-refs
-+ /bin/git-ignore
-+ /bin/git-object-deflate
-+ /bin/git-push-log
-+ /bin/git-sh
-+ /bin/git-track
-+ /bin/git-incoming
-+ /bin/git-outgoing
-+ /bin/gzball
-+ /bin/headers
-+ /bin/markdown
-+ /bin/memcached-tool
-+ /bin/sync-home
-+ /bin/tinyurl
-+ /bin/rbconfig
-+ /bin/rbdev
-+ /bin/addr
-+ /bin/gendiff
++ /.local/bin
++ /.local/bin/ack
++ /.local/bin/autoscreen
++ /.local/bin/lgrep
++ /.local/bin/gce
++ /.local/bin/git-big-object-report
++ /.local/bin/git-cut-branch
++ /.local/bin/git-find-object
++ /.local/bin/git-grab
++ /.local/bin/git-ls-object-refs
++ /.local/bin/git-ignore
++ /.local/bin/git-object-deflate
++ /.local/bin/git-push-log
++ /.local/bin/git-sh
++ /.local/bin/git-track
++ /.local/bin/git-incoming
++ /.local/bin/git-outgoing
++ /.local/bin/gzball
++ /.local/bin/headers
++ /.local/bin/markdown
++ /.local/bin/sync-home
++ /.local/bin/rbconfig
++ /.local/bin/rbdev
++ /.local/bin/addr
++ /.local/bin/gendiff
 FILES
 done
