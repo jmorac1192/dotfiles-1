@@ -4,6 +4,51 @@
 
 
 [alias]
+	# common
+	a            = add
+	b            = branch
+	c            = checkout
+	d            = diff
+	f            = fetch --prune
+	k            = cherry-pick
+	l            = log --pretty=oneline --abbrev-commit
+	n            = commit --verbose --amend
+	r            = remote
+	t            = diff --cached
+
+	# git add and the staging area
+	a            = add
+	aa           = add --update            # mnemonic: "add all"
+	stage        = add
+	ap           = add --patch
+	p            = diff --cached           # mnemonic: "patch"
+	unstage      = reset HEAD
+
+	# commits and history
+	ci           = commit --verbose
+	ca           = commit --verbose --all
+	amend        = commit --verbose --amend
+	n            = commit --verbose --amend
+	k            = cherry-pick
+	re           = rebase --interactive
+	pop          = reset --soft HEAD^
+	peek         = log -p --max-count=1
+
+	# git fetch
+	f            = fetch
+	pm           = pull                    # mnemonic: pull merge
+	pr           = pull --rebase           # mnemonic: pull rebase
+
+	# git diff
+	d            = diff
+	ds           = diff --stat             # mnemonic: "diff stat"
+
+	# git reset
+	hard         = reset --hard
+	soft         = reset --soft
+	scrap        = checkout HEAD
+
+	# rtomayko
 	cb           = !git-cut-branch
 	sh           = !git-sh
 	grab         = !git-grab
@@ -21,7 +66,6 @@
 	outgoing     = !git-outgoing
 	out          = !git-outgoing
 	s            = status -sb -uno --ignore-submodules=untracked
-	st           = status
 	sa           = status -sb --ignore-submodules=untracked
 
 [core]
