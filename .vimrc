@@ -239,7 +239,7 @@ map ,w :call Browser ()<CR>
 " ---------------------------------------------------------------------------
 
 function! StripWhitespace ()
-    exec ':%s/ \+$//gc'
+    exec ':%s/[\t ]\+$//gc'
 endfunction
 map ,s :call StripWhitespace ()<CR>
 
