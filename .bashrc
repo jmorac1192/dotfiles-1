@@ -165,7 +165,7 @@ _expand() {
 # ----------------------------------------------------------------------
 
 # we always pass these to ls(1)
-LS_COMMON="-hBG"
+LS_COMMON="-hBG --color=auto"
 
 # if the dircolors utility is available, set that up too
 dircolors="$(type -P gdircolors dircolors | head -1)"
