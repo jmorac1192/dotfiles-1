@@ -142,23 +142,26 @@ fi
 # ----------------------------------------------------------------------
 
 if [ -z "$BASH_COMPLETION" -a -n "$PS1" ]; then
-    bash=${BASH_VERSION%.*}; bmajor=${bash%.*}; bminor=${bash#*.}
+    bash=${BASH_VERSION%.*}; bmajor=${bash%.*}
+    have_system_bash_completion=false
     if [ "$bmajor" -gt 1 ]; then
         # search for a bash_completion file to source
         for f in /usr/local/etc/bash_completion /etc/bash_completion; do
             if [ -f $f ]; then
+                have_system_bash_completion=true
                 . $f
                 break
             fi
         done
-    fi
-    unset bash bmajor bminor
-fi
 
-# override and disable tilde expansion
-_expand() {
-    return 0
-}
+        # the system bash-completion lib sources this file when loaded
+        # so avoid loading it twice here.
+        if [ -f ~/.bash_completion ] && ! $have_system_bash_completion; then
+            . ~/.bash_completion
+        fi
+    fi
+    unset bash bmajor
+fi
 
 # ----------------------------------------------------------------------
 # LS AND DIRCOLORS

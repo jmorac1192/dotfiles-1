@@ -1,16 +1,6 @@
-#!/bin/sh
-# user bash completion definitions
+#!/bin/bash
+# various additional completions
+# http://www.gnu.org/software/bash/manual/bashref.html#Programmable-Completion-Builtins
 
-: ${USER_BASH_COMPLETION_DIR:=~/.bash_completion.d}
-
-test -n "$USER_BASH_COMPLETION_DIR" && {
-  # source completion directory definitions
-  if [ -d $USER_BASH_COMPLETION_DIR -a -r $USER_BASH_COMPLETION_DIR -a \
-       -x $USER_BASH_COMPLETION_DIR ]; then
-    for i in $USER_BASH_COMPLETION_DIR/*; do
-      [[ ${i##*/} != @(*~|*.bak|*.swp|\#*\#|*.dpkg*|.rpm*) ]] &&
-      [ \( -f $i -o -h $i \) -a -r $i ] && . $i
-    done
-  fi
-  unset i
-}
+complete -F _known_hosts whois nslookup nmap
+complete -o nospace -A command killall
