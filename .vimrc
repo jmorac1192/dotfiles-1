@@ -34,20 +34,12 @@ if &t_Co > 2 || has("gui_running")
   colorscheme slate2
 endif
 
-" ---------------------------------------------------------------------------
-"  Highlight
-" ---------------------------------------------------------------------------
-
-highlight Comment         ctermfg=DarkGrey guifg=#444444
-highlight StatusLineNC    ctermfg=Black ctermbg=DarkGrey cterm=bold
-highlight StatusLine      ctermbg=Black ctermfg=LightGrey
-
 " ----------------------------------------------------------------------------
 "   Highlight Trailing Whitespace
 " ----------------------------------------------------------------------------
 
 set list listchars=trail:.,tab:>.
-highlight SpecialKey ctermfg=DarkGray ctermbg=Black
+highlight SpecialKey ctermfg=DarkGrey ctermbg=Black
 
 " ----------------------------------------------------------------------------
 "  Backups
