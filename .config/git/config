@@ -2,7 +2,6 @@
 	name = Ryan Tomayko
 	email = r@tomayko.com
 
-
 [alias]
 	# common
 	a            = add
