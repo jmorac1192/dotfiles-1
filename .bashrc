@@ -90,7 +90,7 @@ HISTFILESIZE=100000
 HISTSIZE=100000
 
 # ----------------------------------------------------------------------
-# PAGER / EDITOR
+# EDITOR / PAGER / ACK
 # ----------------------------------------------------------------------
 
 # Use vim editor, fall back to vi
@@ -104,8 +104,8 @@ export EDITOR
 PAGER=more
 MANPAGER="$PAGER"
 if [ -n "$(command -v less)" ]; then
-    PAGER="less -FiRSw"
-    MANPAGER="less -FiRsw"
+    PAGER="less -FXiRSw"
+    MANPAGER="less -FXiRsw"
 fi
 export PAGER MANPAGER
 
