@@ -45,14 +45,14 @@ umask 0022
 # PATH
 # ----------------------------------------------------------------------
 
-# we want the various sbins on the path along with /usr/local/bin
+# We want all the sbins on PATH
 PATH="$PATH:/usr/local/sbin:/usr/sbin:/sbin"
-PATH="/usr/local/bin:$PATH"
 
-# put ~/bin first on PATH
-if [ -d "$HOME/bin" ]; then
-    PATH="$HOME/bin:$PATH"
-fi
+# Add more bindirs to front of PATH
+for _path in /usr/local/bin $HOME/.local/bin $HOME/bin; do
+    [ -d "$_path" ] || continue
+    PATH="$_path:$PATH"
+done
 
 # ----------------------------------------------------------------------
 # ENVIRONMENT CONFIGURATION
@@ -89,25 +89,23 @@ HISTSIZE=100000
 # PAGER / EDITOR
 # ----------------------------------------------------------------------
 
-# EDITOR
+# Use vim editor, fall back to vi
+EDITOR=vi
 if [ -n "$(command -v vim)" ]; then
     EDITOR=vim
-else
-    EDITOR=vi
 fi
 export EDITOR
 
-# PAGER
+# Use less pager, fall back to more
+PAGER=more
+MANPAGER="$PAGER"
 if [ -n "$(command -v less)" ]; then
-    PAGER="less -FirSwX"
-    MANPAGER="less -FiRswX"
-else
-    PAGER=more
-    MANPAGER="$PAGER"
+    PAGER="less -FiRSw"
+    MANPAGER="less -FiRsw"
 fi
 export PAGER MANPAGER
 
-# ACK
+# Configure ack paging
 ACK_PAGER="$PAGER"
 ACK_PAGER_COLOR="$PAGER"
 
@@ -161,7 +159,8 @@ if [ -n "$dircolors" ]; then
     test -e "/etc/DIR_COLORS.$TERM"   && COLORS="/etc/DIR_COLORS.$TERM"
     test -e "$HOME/.dircolors"        && COLORS="$HOME/.dircolors"
     test ! -e "$COLORS"               && COLORS=
-    eval `$dircolors --sh $COLORS`
+    eval $($dircolors --sh $COLORS)
+    unset COLORS
 fi
 unset dircolors
 
